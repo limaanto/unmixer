@@ -306,7 +306,7 @@ class MultiTrackPlayhead(QWidget):
     
     @property
     def progress(self) -> float:
-        if self.player:
+        if self.player and self.player.duration() > 0:
             return self.player.position() / self.player.duration()
         return 0
     
