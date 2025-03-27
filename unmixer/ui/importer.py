@@ -324,24 +324,24 @@ class SongImporter(QWidget):
 
         import_kwargs = {
             'clip_mode': self.app.setting(settings.prefs.CLIP_MODE),
-            'disable_gpu_acceleration': self.app.setting(settings.prefs.DISABLE_GPU_ACCELERATION),
+            'disable_gpu_acceleration': self.app.setting(settings.prefs.DISABLE_GPU_ACCELERATION, bool),
             'model_name': self.app.setting(settings.prefs.PRETRAINED_MODEL),
             'other_track_name': self.app.other_track_name,
             'output_format': self.app.output_format,
-            'remove_model_dir': not self.app.setting(settings.importer.CREATE_MODEL_SUBDIR),
-            'split_into_segments': self.app.setting(settings.prefs.SPLIT_INTO_SEGMENTS),
+            'remove_model_dir': not self.app.setting(settings.importer.CREATE_MODEL_SUBDIR, bool),
+            'split_into_segments': self.app.setting(settings.prefs.SPLIT_INTO_SEGMENTS, bool),
         }
         if not has_gpu_acceleration() or import_kwargs['disable_gpu_acceleration']:
-            import_kwargs['cpu_parallelism'] = self.app.setting(settings.prefs.CPU_PARALLELISM)
+            import_kwargs['cpu_parallelism'] = self.app.setting(settings.prefs.CPU_PARALLELISM, int)
         if import_kwargs['split_into_segments']:
-            import_kwargs['segment_length_seconds'] = self.app.setting(settings.prefs.SEGMENT_LENGTH)
-            import_kwargs['segment_overlap_percent'] = self.app.setting(settings.prefs.SEGMENT_OVERLAP)
-            import_kwargs['random_shift_count'] = self.app.setting(settings.prefs.SHIFT_COUNT)
+            import_kwargs['segment_length_seconds'] = self.app.setting(settings.prefs.SEGMENT_LENGTH, int)
+            import_kwargs['segment_overlap_percent'] = self.app.setting(settings.prefs.SEGMENT_OVERLAP, int)
+            import_kwargs['random_shift_count'] = self.app.setting(settings.prefs.SHIFT_COUNT, int)
         if self.app.output_format == MP3_FORMAT:
-            import_kwargs['mp3_preset'] = self.app.setting(settings.prefs.MP3_PRESET)
-            import_kwargs['mp3_bitrate_kbps'] = self.app.setting(settings.prefs.MP3_BITRATE)
+            import_kwargs['mp3_preset'] = self.app.setting(settings.prefs.MP3_PRESET, int)
+            import_kwargs['mp3_bitrate_kbps'] = self.app.setting(settings.prefs.MP3_BITRATE, int)
         elif self.app.output_format == WAV_FORMAT:
-            import_kwargs['wav_bit_depth'] = self.app.setting(settings.prefs.WAV_BIT_DEPTH)
+            import_kwargs['wav_bit_depth'] = self.app.setting(settings.prefs.WAV_BIT_DEPTH, int)
 
         self._import_process = Process(target=create_isolated_tracks_from_audio_file,
                                        args=(self.input_file_path, self.app.output_dir_path), kwargs=import_kwargs)

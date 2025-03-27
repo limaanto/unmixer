@@ -312,7 +312,7 @@ class UnmixerPreferences(QWidget):
         self.output_dir.changed.connect(self.output_dir_changed)
 
         self.create_model_subdir_checkbox = QCheckBox()
-        self.create_model_subdir_checkbox.setChecked(self.setting(settings.importer.CREATE_MODEL_SUBDIR))
+        self.create_model_subdir_checkbox.setChecked(self.setting(settings.importer.CREATE_MODEL_SUBDIR, bool))
         self.create_model_subdir_checkbox.toggled.connect(self.create_model_subdir_setting_toggled)
 
         self.effective_output_dir_label = QLabel(self.effective_output_dir())
@@ -352,7 +352,7 @@ class UnmixerPreferences(QWidget):
         
         self.open_track_explorer_checkbox = QCheckBox()
         self.open_track_explorer_checkbox.setChecked(
-            self.setting(settings.prefs.SHOW_TRACK_EXPLORER_WHEN_IMPORT_FINISHED)
+            self.setting(settings.prefs.SHOW_TRACK_EXPLORER_WHEN_IMPORT_FINISHED, bool)
         )
         self.open_track_explorer_checkbox.toggled.connect(self.open_track_explorer_setting_toggled)
 
@@ -360,7 +360,7 @@ class UnmixerPreferences(QWidget):
         if selected_model_info and selected_model_info.max_segment_length_seconds:
             max_segment_length_seconds = selected_model_info.max_segment_length_seconds
 
-        split_into_segments = self.setting(settings.prefs.SPLIT_INTO_SEGMENTS)
+        split_into_segments = self.setting(settings.prefs.SPLIT_INTO_SEGMENTS, bool)
         if max_segment_length_seconds == SHORT_MAX_SEGMENT_LENGTH_SECONDS and not split_into_segments:
             split_into_segments = True
             self.update_setting(settings.prefs.SPLIT_INTO_SEGMENTS, split_into_segments)
@@ -374,7 +374,7 @@ class UnmixerPreferences(QWidget):
 
         self.segment_length_label = None
 
-        segment_length_seconds = self.setting(settings.prefs.SEGMENT_LENGTH)
+        segment_length_seconds = self.setting(settings.prefs.SEGMENT_LENGTH, int)
         if segment_length_seconds > max_segment_length_seconds:
             segment_length_seconds = max_segment_length_seconds
             self.app.update_setting(settings.prefs.SEGMENT_LENGTH, max_segment_length_seconds)
@@ -393,7 +393,7 @@ class UnmixerPreferences(QWidget):
         self.segment_overlap_spin_box = QSpinBox()
         self.segment_overlap_spin_box.setMinimum(MIN_SEGMENT_OVERLAP_PERCENT)
         self.segment_overlap_spin_box.setMaximum(MAX_SEGMENT_OVERLAP_PERCENT)
-        self.segment_overlap_spin_box.setValue(self.setting(settings.prefs.SEGMENT_OVERLAP))
+        self.segment_overlap_spin_box.setValue(self.setting(settings.prefs.SEGMENT_OVERLAP, int))
         self.segment_overlap_spin_box.valueChanged.connect(self.update_segment_overlap)
 
         self.segment_overlap_layout = QHBoxLayout()
@@ -404,7 +404,7 @@ class UnmixerPreferences(QWidget):
         self.shift_count_spin_box = QSpinBox()
         self.shift_count_spin_box.setMinimum(MIN_SHIFT_COUNT)
         self.shift_count_spin_box.setMaximum(MAX_SHIFT_COUNT)
-        self.shift_count_spin_box.setValue(self.setting(settings.prefs.SHIFT_COUNT))
+        self.shift_count_spin_box.setValue(self.setting(settings.prefs.SHIFT_COUNT, int))
         self.shift_count_spin_box.valueChanged.connect(self.update_shift_count)
 
         self.mp3_preset_slider = QSlider(Qt.Orientation.Horizontal)
@@ -412,7 +412,7 @@ class UnmixerPreferences(QWidget):
         self.mp3_preset_slider.setMaximum(MP3_PRESET_MAX)
         self.mp3_preset_slider.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.mp3_preset_slider.setTickInterval(1)
-        self.mp3_preset_slider.setValue(self.setting(settings.prefs.MP3_PRESET))
+        self.mp3_preset_slider.setValue(self.setting(settings.prefs.MP3_PRESET, int))
         self.mp3_preset_slider.valueChanged.connect(self.update_mp3_preset)
         
         self.mp3_preset_slider_layout = QHBoxLayout()
@@ -470,7 +470,7 @@ class UnmixerPreferences(QWidget):
         self.disable_gpu_acceleration_checkbox = None
         if has_gpu_acceleration():
             self.disable_gpu_acceleration_checkbox = QCheckBox()
-            self.disable_gpu_acceleration_checkbox.setChecked(self.setting(settings.prefs.DISABLE_GPU_ACCELERATION))
+            self.disable_gpu_acceleration_checkbox.setChecked(self.setting(settings.prefs.DISABLE_GPU_ACCELERATION, bool))
             self.disable_gpu_acceleration_checkbox.toggled.connect(self.disable_gpu_acceleration_toggled)
 
         self.cpu_parallelism_spin_box = None
@@ -480,7 +480,7 @@ class UnmixerPreferences(QWidget):
             self.cpu_parallelism_spin_box = QSpinBox()
             self.cpu_parallelism_spin_box.setMinimum(MIN_CPU_PARALLELISM)
             self.cpu_parallelism_spin_box.setMaximum(self.cpu_count)
-            self.cpu_parallelism_spin_box.setValue(self.setting(settings.prefs.CPU_PARALLELISM))
+            self.cpu_parallelism_spin_box.setValue(self.setting(settings.prefs.CPU_PARALLELISM, int))
             self.cpu_parallelism_spin_box.valueChanged.connect(self.update_cpu_parallelism)
 
             self.cpu_parallelism_layout = QHBoxLayout()
@@ -531,8 +531,8 @@ class UnmixerPreferences(QWidget):
         label.setFont(font)
         return label
 
-    def setting(self, key: str) -> Any:
-        return self.app.setting(key)
+    def setting(self, key: str, type: object=str) -> Any:
+        return self.app.setting(key, type)
 
     def update_setting(self, key: str, value: Any) -> None:
         self.app.update_setting(key, value)

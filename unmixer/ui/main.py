@@ -551,8 +551,8 @@ class UnmixerUI:
         else:
             self.import_window = UnmixerImportWindow(self, source_file_path=self.song_path)
 
-    def setting(self, key: str) -> Any:
-        return self.settings.value(key, DEFAULT_SETTINGS[key])
+    def setting(self, key: str, type: object = str) -> Any:
+        return self.settings.value(key, DEFAULT_SETTINGS[key], type)
 
     def update_setting(self, key: str, value: Any) -> None:
         self.settings.setValue(key, value)

@@ -411,7 +411,7 @@ class MultiTrackDisplay(QWidget):
         self._ffmpeg_thread = None
         self._ffmpeg_thread_worker = None
         self._soloed_track = None
-        self._volume = self.parent().app.setting(settings.playback.VOLUME)
+        self._volume = self.parent().app.setting(settings.playback.VOLUME, int)
         
         self.title = QLabel(f'Song:  {song_title}')
         font = self.title.font()
